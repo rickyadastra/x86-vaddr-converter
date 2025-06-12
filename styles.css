@@ -1,0 +1,191 @@
+
+body {
+    font-family: 'Inter', sans-serif; /* Use Inter font for Notion feel */
+    background-color: var(--bs-body-bg); /* Use Bootstrap variable */
+    color: var(--bs-body-color); /* Use Bootstrap variable */
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.card {
+    border-radius: 8px; /* Rounded corners for the card */
+}
+
+.card-header {
+    background-color: var(--bs-card-bg); /* Match card body background */
+    border-bottom: 1px solid var(--bs-border-color);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: var(--bs-body-color);
+}
+
+h1, h2, h5 {
+    color: var(--bs-body-color); /* Lighter text for headers */
+    font-weight: 600; /* Semi-bold */
+}
+
+.form-label {
+    font-weight: 500; /* Medium weight for labels */
+    color: var(--bs-body-color);
+}
+
+.form-control, .form-select {
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    box-shadow: none; /* Remove default bootstrap focus shadow */
+    background-color: var(--bs-body-bg); /* Input background */
+    color: var(--bs-body-color); /* Input text color */
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--bs-blue);
+    box-shadow: 0 0 0 0.1rem rgba(13, 110, 253, 0.25); /* Custom blue focus shadow for dark theme */
+}
+
+.output-value {
+    font-family: monospace; /* Monospace for address/index values */
+    color: var(--bs-body-color);
+    flex-grow: 1; /* Allow it to take up space */
+    text-align: right; /* Align value to the right */
+}
+
+.output-label {
+    color: var(--bs-blue); /* Blue for the index labels */
+    font-weight: 500;
+}
+
+.error {
+    background-color: var(--bs-danger-bg-subtle);
+    color: var(--bs-danger);
+    border-color: var(--bs-danger-border-subtle);
+    font-weight: 500;
+    padding: 1rem;
+}
+
+/* Specific styles for better Notion PDF feel */
+.card-body {
+    padding: 2.5rem; /* More generous padding */
+}
+
+.card-title {
+    margin-bottom: 1.5rem;
+}
+
+.input-group {
+    flex-wrap: nowrap;
+    width: auto;
+}
+
+.input-group label {
+    margin-bottom: 0.5rem;
+
+}
+
+/* Tooltip icon styling */
+.info-icon {
+    cursor: help;
+    color: var(--bs-blue);
+    vertical-align: middle;
+    margin-left: 5px; /* Spacing between label/text and icon */
+}
+
+.bit-breakdown {
+    font-size: 0.85em;
+    color: #adb5bd; /* Lighter grey for bits in dark theme */
+    margin-left: 10px; /* Indent bit breakdown */
+    flex-shrink: 0; /* Don't shrink */
+    min-width: 100px; /* Ensure space for bit breakdown */
+}
+
+/* Input specific to indices */
+.index-input-group {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically align items */
+    margin-bottom: 0.5rem; /* Reduce margin to be more compact */
+}
+.index-input-group .form-label {
+    flex-basis: 150px; /* Fixed width for labels */
+    margin-bottom: 0;
+    padding-right: 10px; /* Space between label and input */
+}
+.index-input-group input[type="number"] {
+    flex-grow: 0; /* Don't grow */
+    width: 80px; /* Fixed width for number input */
+    text-align: right;
+}
+.index-input-group .hex-display {
+    flex-grow: 0;
+    width: 80px; /* Fixed width for hex display */
+    text-align: right;
+    padding: 0.375rem 0.75rem; /* Match input padding */
+    font-family: monospace;
+    background-color: #343a40; /* Darker gray background for display */
+    border: 1px solid var(--bs-border-color);
+    border-radius: 4px;
+    margin-left: 5px; /* Spacing between dec and hex */
+    color: var(--bs-body-color);
+}
+
+/* SVG Visualization Styles */
+#pagingVisualization {
+    width: 100%;
+    height: auto;
+    /* border: 1px solid var(--bs-border-color); */
+    border-radius: 8px;
+    margin-top: 1rem;
+    /* background-color: var(--bs-card-cap-bg);  */
+    box-sizing: border-box;
+}
+
+.paging-block {
+    opacity: 0.5;
+    fill: transparent;
+    stroke: var(--bs-border-color);
+    stroke-width: 1;
+    rx: 5; /* Rounded corners for SVG rects */
+    ry: 5;
+}
+
+/* New style to highlight table blocks */
+.table-block {
+    opacity: 0.5;
+    fill: var(--bs-dark-border-subtle);
+    stroke: var(--bs-border-color-translucent);
+}
+
+.block-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    fill: var(--bs-primary);
+    text-anchor: middle;
+}
+.index-value {
+    font-family: monospace;
+    font-size: 14px;
+    fill: var(--bs-primary-text-emphasis);
+    font-weight: 600;
+    text-anchor: middle;
+}
+.cr3-label {
+    font-weight: 600;
+    fill: var(--bs-primary);
+}
+.offset-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    fill: #adb5bd;
+    text-anchor: middle;
+}
+.offset-value {
+    font-family: monospace;
+    font-size: 14px;
+    fill: var(--bs-primary-text-emphasis); 
+    font-weight: 600;
+    text-anchor: middle;
+}
+.arrow-line {
+    stroke: var(--bs-border-color);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-width: 1.5;
+    marker-end: url(#arrowhead);
+}

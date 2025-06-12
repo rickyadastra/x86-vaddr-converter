@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>x86 Virtual Address Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">x86 Virtual Address Converter</h2>
+                <p class="text-muted mb-4 card-subtitle text-center">
+                   This x86 Virtual Address Converter is ideal for learning and teaching complex memory management concepts. 
+                   You can input a virtual address to see its breakdown into paging table indices, or adjust individual indices 
+                   to observe the resulting virtual address. It aids in debugging and reverse engineering by quickly translating addresses, 
+                   helps OS developers validate paging setups, and allows hardware enthusiasts to explore CPU memory translation.
+                </p>
+
+                <div class="mb-4">
+                    <label for="paginationMode" class="h5 form-label">
+                        Paging mode
+                        <i class="bi bi-info-circle info-icon" data-bs-toggle="tooltip" data-bs-placement="top" 
+                           title="Choose the paging scheme you're using (32 bit with PAE, 64 bit with level-4 page table or 64 bit with level-5 page table)"></i>
+                    </label>
+                    <select id="paginationMode" class="form-select" onchange="updateUI(); handlePaginationModeChange();">
+                        <option value="32bit_pae">32 bit (with PAE)</option>
+                        <option value="64bit_4level" selected>64 bit (with level-4 page table)</option>
+                        <option value="64bit_5level">64 bit (with level-5 page table)</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label for="virtualAddress" class="h5 form-label">
+                        Virtual Address
+                        <i class="bi bi-info-circle info-icon" data-bs-toggle="tooltip" data-bs-placement="top" 
+                           title="The logical memory address that a program attempts to access. It will be translated by the processor into a physical address using paging structures."></i>
+                    </label>
+                    <input type="text" id="virtualAddress" class="form-control" value="0x7FFFC0000000" placeholder="0x..." autocomplete="off">
+                </div>
+
+                <div class="mb-5">
+                    <h5 class="form-label">Paging tables indexes</h5>
+                    <div class="mb-2 index-input-group">
+                        <label for="inputPml5" class="form-label">PML5 Index
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Points to the PML4 table"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputPml5" class="form-control" min="0" max="511" value="0">
+                            <span class="hex-display input-group-text" id="inputPml5Hex">0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputPml5Bits"></span>
+                    </div>
+
+                    <div class="mb-2 index-input-group">
+                        <label for="inputPml4" class="form-label">PML4 Index
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Points to the PDPT table"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputPml4" class="form-control" min="0" max="511" value="0">
+                            <span class="hex-display input-group-text" id="inputPml4Hex">0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputPml4Bits"></span>
+                    </div>
+
+                    <div class="mb-2 index-input-group">
+                        <label for="inputPdpt" class="form-label">PDPT Index
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Points to the PD table"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputPdpt" class="form-control" min="0" max="511" value="0">
+                            <span class="hex-display input-group-text" id="inputPdptHex">0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputPdptBits"></span>
+                    </div>
+
+                    <div class="mb-2 index-input-group">
+                        <label for="inputPd" class="form-label">PD Index
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Points to the PT table"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputPd" class="form-control" min="0" max="511" value="0">
+                            <span class="hex-display input-group-text" id="inputPdHex">0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputPdBits"></span>
+                    </div>
+
+                    <div class="mb-2 index-input-group">
+                        <label for="inputPt" class="form-label">PT Index
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Points to the physical frame"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputPt" class="form-control" min="0" max="511" value="0">
+                            <span class="hex-display input-group-text" id="inputPtHex">0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputPtBits"></span>
+                    </div>
+
+                    <div class="mb-2 index-input-group">
+                        <label for="inputOffset" class="form-label">Page Offset
+                            <i class="bi bi-info-circle info-icon text-body-tertiary" data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="Identifies the byte within the virtual page or physical frame"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="number" id="inputOffset" class="form-control" min="0" max="4095" value="0">
+                            <span class="hex-display input-group-text" id="inputOffsetHex">0x0</span>
+                        </div>
+                        <span class="bit-breakdown" id="inputOffsetBits"></span>
+                    </div>
+                </div>
+
+                <div id="errorMessageContainer" class="card error d-none">
+                    <i class="bi bi-x-octagon-fill"></i> <p id="errorMessage" class="d-inline"></p>
+                </div>
+
+                <div id="pagingVisualizationContainerContainer">
+                    <h5 class="form-label">
+                            Virtual Address translation flow
+                            <i class="bi bi-info-circle info-icon" data-bs-toggle="tooltip" data-bs-placement="top" 
+                               title="This diagram shows how an x86 CPU translates a virtual address into a physical address using paging tables"></i>
+                        </h5>
+                    <div id="pagingVisualizationContainer">
+                        <svg id="pagingVisualization" viewBox="0 0 700 120"></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+                    <a href="https://github.com/rickyadastra" class="fs-6 text-body-tertiary text-decoration-none">Made by
+                        <i class="bi bi-github"></i> rickyadastra</a>
+        </div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+</html>
